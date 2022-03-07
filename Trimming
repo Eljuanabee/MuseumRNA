@@ -1,0 +1,60 @@
+Museum RNA
+
+##trim adaptors
+
+Module load trimmomatic/0.39
+
+
+
+from snakemake.utils import R
+from scripts.split_fasta_regions import split_fasta
+
+outDir = " "
+refDir = " "
+
+refBowtie2 = "
+
+
+##Example
+##java -jar trimmomatic-0.35.jar SE -phred33 input.fq.gz output.fq.gz ILLUMINACLIP:TruSeq3-SE:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+
+trimmomatic SE -phred64 M_vetustissima-Ancient_S1_L001_R1_001.fastq.gz Trimmed_AncientRNA.fq.gz ILLUMINACLIP:TruSeq3-SE.fa:2:30:10 &
+
+Input Reads: 1446031 Surviving: 1331261 (92.06%) Dropped: 114770 (7.94%)
+
+trimmomatic SE -phred64 M_vetustissima-Ancient_S1_L001_R1_001.fastq.gz Trimmed_AncientRNA.fq.gz ILLUMINACLIP:Adaptor6SEq.fa:2:30:10 &
+
+
+trimmomatic SE -phred64 M_vetustissima-Ancient_S1_L001_R1_001.fastq.gz Trimmed_AncientRNA_MinLenght20.fq.gz ILLUMINACLIP:Adaptor6SEq.fa:2:30:10 MINLEN:20 &
+
+
+
+trimmomatic SE -phred64 M_vetustissima-Ancient_S1_L001_R1_001.fastq.gz Trimmed_AncientRNA_MinLenght20.fq.gz ILLUMINACLIP:TruSeq3-SE.fa:2:30:10 MINLEN:20 &
+
++ Input Reads: 1446031 Surviving: 645310 (44.63%) Dropped: 800721 (55.37%)
+
+
+fastqc Trimmed_AncientRNA_MinLenght20.fq.gz Trimmed_AncientRNA_MinLenght20.htlm & 
+
+
+trimmomatic SE -phred64 Trimmed_AncientRNA_MinLenght20.fq.gz Trimmed_AncientRNA_MinLenght20_NoAdapt6.fq.gz ILLUMINACLIP:Adaptor6SEq.fa:2:30:10 &
+
+
+
+fastqc Trimmed_AncientRNA.fq.gz  Trimmed_AncientRNA.fq.htlm &
+
+fastqc Trimmed_AncientRNA_MinLenght20_NoAdapt6.fq.gz Trimmed_AncientRNA_MinLenght20_NoAdapt6.htlm &
+
+
+
+trimmomatic SE -phred64 Trimmed_AncientRNA_MinLenght20_NoAdapt6.fastq Trimmed_AncientRNA_MinLenght13_NoAdapt6.fastq MINLEN:13 &
+
+
+module load seqtk/1.3
+	
+	seqtk seq -aQ64 -q20 -n N IN.fastq > OUT.fasta
+	
+	seqtk seq -A Trimmed_AncientRNA_MinLenght20_NoAdapt6.fastq  > Trimmed_AncientRNA_MinLenght20_NoAdapt6.fa &
+
+
