@@ -1,6 +1,19 @@
-Museum RNA
+##Museum RNA
 
 ##trim adaptors
+
+#modules
+module load miniconda3/4.9.2
+
+
+
+conda create -n test_env
+conda config --append channels conda-forge
+
+## Package Plan ##
+
+  environment location: /home/lob021/.conda/envs/test_env
+
 
 Module load trimmomatic/0.39
 
